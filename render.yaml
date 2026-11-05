@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: taotao-phone-test
+    runtime: node
+    plan: starter
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /var/data
+      - key: TRUST_PROXY
+        value: "1"
+      - key: DEEPSEEK_MODEL
+        value: deepseek-chat
+      - key: DEEPSEEK_BASE_URL
+        value: https://api.deepseek.com
+      - key: DEEPSEEK_MAX_TOKENS
+        value: "1800"
+      - key: MAX_CODE_QUOTA
+        value: "10"
+      - key: CODE_TTL_DAYS
+        value: "30"
+      - key: RATE_MAX
+        value: "12"
+      - key: RATE_WINDOW_MIN
+        value: "10"
+      - key: IP_DAILY_MAX
+        value: "30"
+      - key: GLOBAL_DAILY_MAX
+        value: "200"
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: ADMIN_TOKEN
+        sync: false
+    disk:
+      name: data
+      mountPath: /var/data
+      sizeGB: 1

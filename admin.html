@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FFF8F1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>选机后台 · 验证码管理</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='8' y='4' width='48' height='56' rx='14' fill='%23FFF8F1' stroke='%234B3B40' stroke-width='3'/%3E%3Cpath d='M32 46c-1-1-12-8-12-16 0-5 6-8 12-2 6-6 12-3 12 2 0 8-11 15-12 16z' fill='%23E9899B'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/admin.css">
+</head>
+<body data-view="admin">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="回到测试首页">
+      <span class="brand__mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" fill="none">
+          <rect x="7" y="4" width="26" height="32" rx="9" fill="#FFFDFB" stroke="#4B3B40" stroke-width="2.4"/>
+          <path d="M20 29c-.6-.5-7-4.6-7-9 0-3 3.4-4.6 7-1.2 3.6-3.4 7-1.8 7 1.2 0 4.4-6.4 8.5-7 9z" fill="#E9899B"/>
+        </svg>
+      </span>
+      <span class="brand__text">
+        <strong data-brand>桃桃选机</strong>
+        <small data-brand-en>TAOTAO PICKS</small>
+      </span>
+    </a>
+    <div class="topbar__right">
+      <a class="admin-back" href="/">← 回到测试</a>
+    </div>
+  </header>
+
+  <main class="admin-shell">
+    <section class="admin-hero">
+      <p class="eyebrow"><span class="eyebrow__dot"></span> SELLER ONLY</p>
+      <h1>选机后台 <span>♡</span></h1>
+      <p>给买家发验证码。一个码最多 10 次，每次生成 1 份报告。</p>
+    </section>
+
+    <section class="admin-panel admin-login" id="login-panel">
+      <div class="admin-panel__head">
+        <div>
+          <span class="kicker">STEP 01</span>
+          <h2>输入管理员密码</h2>
+        </div>
+        <span class="admin-sticker">🔑</span>
+      </div>
+      <p class="admin-muted">密码在服务器的 <code>ADMIN_TOKEN</code> 环境变量里，不会保存在网页里。</p>
+      <form id="login-form" class="admin-form">
+        <label class="admin-label" for="admin-token">管理员密码</label>
+        <div class="admin-inline">
+          <input class="admin-input" id="admin-token" type="password" autocomplete="current-password" placeholder="粘贴 ADMIN_TOKEN">
+          <button class="btn btn--primary" type="submit">进入后台</button>
+        </div>
+      </form>
+      <p class="admin-error" id="login-error" hidden></p>
+    </section>
+
+    <div id="dashboard" hidden>
+      <section class="stat-grid" id="stats" aria-label="验证码统计"></section>
+
+      <div class="admin-grid">
+        <section class="admin-panel">
+          <div class="admin-panel__head">
+            <div>
+              <span class="kicker">STEP 02</span>
+              <h2>生成验证码</h2>
+            </div>
+            <span class="admin-sticker">🎀</span>
+          </div>
+          <form id="create-form" class="admin-form">
+            <div class="admin-fields">
+              <div>
+                <label class="admin-label" for="create-count">生成几个</label>
+                <input class="admin-input" id="create-count" type="number" min="1" max="50" value="10">
+              </div>
+              <div>
+                <label class="admin-label" for="create-quota">每个可用几次</label>
+                <input class="admin-input" id="create-quota" type="number" min="1" max="10" value="10">
+              </div>
+            </div>
+            <label class="admin-label" for="create-note">备注（给谁 / 哪一批）</label>
+            <input class="admin-input" id="create-note" type="text" maxlength="80" placeholder="例如：11 月小红书第一批">
+            <button class="btn btn--primary admin-submit" type="submit">生成验证码 ✨</button>
+            <p class="admin-error" id="create-error" hidden></p>
+          </form>
+        </section>
+
+        <section class="admin-panel admin-tips">
+          <div class="admin-panel__head">
+            <div>
+              <span class="kicker">HOW IT WORKS</span>
+              <h2>怎么用</h2>
+            </div>
+            <span class="admin-sticker">💡</span>
+          </div>
+          <ol>
+            <li>生成后，复制「链接」或「验证码」发给买家。</li>
+            <li>买家答完题，在结果页输入验证码，才会调用 AI。</li>
+            <li>一个码最多 10 次；每次成功后剩余次数减 1。</li>
+            <li>AI 失败会自动退回次数；恶意刷码会被 IP 限流。</li>
+          </ol>
+          <p class="admin-muted">建议一个买家发一个码；不要在公开笔记里贴码。</p>
+        </section>
+      </div>
+
+      <section class="admin-panel" id="new-codes-panel" hidden>
+        <div class="admin-panel__head">
+          <div>
+            <span class="kicker">NEW</span>
+            <h2>刚生成的验证码</h2>
+          </div>
+          <button class="btn btn--ghost btn--xs" type="button" id="copy-new">全部复制</button>
+        </div>
+        <div class="new-code-list" id="new-code-list"></div>
+      </section>
+
+      <section class="admin-panel">
+        <div class="admin-panel__head">
+          <div>
+            <span class="kicker">CODES</span>
+            <h2>验证码列表</h2>
+          </div>
+          <div class="admin-tools">
+            <button class="btn btn--ghost btn--xs" type="button" id="refresh-codes">刷新</button>
+            <button class="btn btn--ghost btn--xs" type="button" id="logout">退出</button>
+          </div>
+        </div>
+        <p class="admin-error" id="list-error" hidden></p>
+        <div class="code-list" id="code-list"></div>
+      </section>
+    </div>
+
+    <p class="admin-toast" id="admin-toast" role="status" aria-live="polite"></p>
+  </main>
+
+  <footer class="footer">
+    <div class="shell footer__inner">
+      <p>选机后台 · 验证码与 API 额度管理</p>
+      <p class="footer__tiny">不要把管理员密码写进小红书、截图或前端代码。</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+.env
+data/
+node_modules/
+tests/
+_qa/
+preview/
+README.md
+*.log

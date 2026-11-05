@@ -1,0 +1,15 @@
+{
+  "name": "taotao-phone-test",
+  "version": "2.0.0",
+  "private": true,
+  "description": "桃桃选机：小红书手机测试站，DeepSeek 生成 + 验证码额度 + 可爱 PDF",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node tests/engine.test.js && node tests/api.test.js"
+  },
+  "engines": {
+    "node": ">=20.6"
+  }
+}
