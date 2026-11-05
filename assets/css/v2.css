@@ -1,0 +1,942 @@
+/* ============================================================
+   桃桃选机 v2
+   验证码解锁 / 5×5 主题 / 可爱 PDF / 小字放大
+   ============================================================ */
+
+/* ---------- 5 套配色 ---------- */
+:root[data-theme="matcha"] {
+  --rose: #7fb69b;
+  --rose-deep: #4f8c72;
+  --rose-soft: #e4f5ec;
+  --lilac: #a9c7b0;
+  --lilac-soft: #eff8f2;
+  --butter: #f0c978;
+  --butter-soft: #fff6df;
+  --mint: #8fcdb0;
+  --cream: #f8fbf6;
+  --cream-2: #eff7f1;
+  --line: #ddebe2;
+  --line-2: #c9ded2;
+}
+
+:root[data-theme="taro"] {
+  --rose: #a78bdb;
+  --rose-deep: #7c5fbf;
+  --rose-soft: #ede4ff;
+  --lilac: #c9a9e8;
+  --lilac-soft: #f6efff;
+  --butter: #ffd9b0;
+  --butter-soft: #fff3e4;
+  --mint: #b9d8c6;
+  --cream: #fbf7ff;
+  --cream-2: #f3ecff;
+  --line: #e7ddf7;
+  --line-2: #d7c8ef;
+}
+
+:root[data-theme="soda"] {
+  --rose: #7fb5d6;
+  --rose-deep: #4f87ad;
+  --rose-soft: #e0f0fa;
+  --lilac: #a9c8e8;
+  --lilac-soft: #edf6ff;
+  --butter: #ffe0a3;
+  --butter-soft: #fff6df;
+  --mint: #a9dcc5;
+  --cream: #f6fbfe;
+  --cream-2: #eaf6fc;
+  --line: #d9e9f3;
+  --line-2: #c3dceb;
+}
+
+:root[data-theme="caramel"] {
+  --rose: #d9a05b;
+  --rose-deep: #a97434;
+  --rose-soft: #fbedda;
+  --lilac: #c9b6e8;
+  --lilac-soft: #f5efff;
+  --butter: #ffdfa0;
+  --butter-soft: #fff5dc;
+  --mint: #b7dcc6;
+  --cream: #fffaf0;
+  --cream-2: #fdf2df;
+  --line: #f0e0c9;
+  --line-2: #e3ceb1;
+}
+
+html[data-theme="matcha"] body {
+  background:
+    radial-gradient(1100px 620px at 8% -8%, #ddf3e6 0%, rgba(221, 243, 230, 0) 58%),
+    radial-gradient(900px 560px at 102% 2%, #eaf6ef 0%, rgba(234, 246, 239, 0) 55%),
+    var(--cream);
+}
+html[data-theme="taro"] body {
+  background:
+    radial-gradient(1100px 620px at 8% -8%, #eee5ff 0%, rgba(238, 229, 255, 0) 58%),
+    radial-gradient(900px 560px at 102% 2%, #f7efff 0%, rgba(247, 239, 255, 0) 55%),
+    var(--cream);
+}
+html[data-theme="soda"] body {
+  background:
+    radial-gradient(1100px 620px at 8% -8%, #dff1fb 0%, rgba(223, 241, 251, 0) 58%),
+    radial-gradient(900px 560px at 102% 2%, #eaf7ff 0%, rgba(234, 247, 255, 0) 55%),
+    var(--cream);
+}
+html[data-theme="caramel"] body {
+  background:
+    radial-gradient(1100px 620px at 8% -8%, #fbebd8 0%, rgba(251, 235, 216, 0) 58%),
+    radial-gradient(900px 560px at 102% 2%, #fff4e3 0%, rgba(255, 244, 227, 0) 55%),
+    var(--cream);
+}
+
+html[data-theme] .topbar {
+  background: color-mix(in srgb, var(--cream) 80%, transparent);
+  border-bottom-color: var(--line);
+}
+
+html[data-theme] .footer {
+  background: color-mix(in srgb, var(--cream) 70%, transparent);
+}
+
+html[data-theme] .blob--1 {
+  background: radial-gradient(circle at 35% 35%, var(--rose-soft), var(--butter-soft));
+}
+html[data-theme] .blob--2 {
+  background: radial-gradient(circle at 40% 40%, var(--lilac-soft), var(--rose-soft));
+}
+html[data-theme] .blob--3 {
+  background: radial-gradient(circle at 40% 40%, var(--butter-soft), var(--rose-soft));
+}
+
+html[data-theme] .btn--primary {
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--rose-deep) 28%, transparent),
+    inset 0 -2px 0 rgba(70, 40, 45, 0.1);
+}
+
+html[data-theme] .brand__mark,
+html[data-theme] .icon-btn,
+html[data-theme] .prompt-tab.is-active {
+  border-color: var(--line);
+}
+
+html[data-theme] .pick--main {
+  border-color: color-mix(in srgb, var(--rose) 55%, #fff);
+  background: linear-gradient(165deg, #fffdfb 0%, var(--rose-soft) 100%);
+}
+
+html[data-theme] .pick__fit {
+  background: var(--cream-2);
+}
+
+.report-head p {
+  border-left-color: var(--line-2);
+}
+
+/* ---------- 结果页装饰元素 ---------- */
+@media screen {
+  .motif-layer {
+    display: none;
+  }
+}
+
+.motif-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.motif-layer .motif {
+  position: absolute;
+  color: var(--rose-deep);
+  font-size: clamp(18px, 4vw, 30px);
+  line-height: 1;
+  opacity: 0.16;
+  transform: rotate(var(--rot, 0deg));
+  user-select: none;
+}
+
+.motif--1 { top: 5%; left: 2%; --rot: -18deg; font-size: 34px; }
+.motif--2 { top: 8%; right: 3%; --rot: 16deg; font-size: 24px; }
+.motif--3 { top: 22%; left: 4%; --rot: 12deg; font-size: 18px; }
+.motif--4 { top: 36%; right: 3%; --rot: -12deg; font-size: 28px; }
+.motif--5 { top: 51%; left: 2%; --rot: 22deg; font-size: 22px; }
+.motif--6 { top: 64%; right: 5%; --rot: -20deg; font-size: 34px; }
+.motif--7 { top: 76%; left: 4%; --rot: -10deg; font-size: 26px; }
+.motif--8 { top: 89%; right: 4%; --rot: 18deg; font-size: 20px; }
+.motif--9 { top: 42%; left: 48%; --rot: 8deg; font-size: 16px; opacity: 0.1; }
+.motif--10 { bottom: 3%; left: 46%; --rot: -14deg; font-size: 24px; }
+
+.result-shell {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- 验证码卡 ---------- */
+.unlock-card {
+  position: relative;
+  overflow: hidden;
+  margin-top: 18px;
+  padding: clamp(22px, 4vw, 34px);
+  border: 1.5px solid var(--line);
+  border-radius: 30px;
+  background:
+    radial-gradient(300px 160px at 94% 0%, var(--butter-soft) 0%, transparent 70%),
+    linear-gradient(160deg, #fffdfb 0%, var(--rose-soft) 100%);
+  box-shadow: var(--shadow);
+}
+
+.unlock-card::after {
+  content: "";
+  position: absolute;
+  right: -44px;
+  bottom: -54px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: var(--lilac-soft);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.unlock-card__head {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.unlock-card h3 {
+  margin: 6px 0 0;
+  font-size: clamp(21px, 3.4vw, 28px);
+  line-height: 1.4;
+  letter-spacing: -0.015em;
+}
+
+.unlock-card__sticker {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 52px;
+  height: 52px;
+  border: 1.5px dashed var(--line-2);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 25px;
+  transform: rotate(5deg);
+}
+
+.unlock-card__desc {
+  position: relative;
+  z-index: 1;
+  margin: 12px 0 16px;
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.unlock-form {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 10px;
+}
+
+.code-input {
+  flex: 1;
+  min-width: 0;
+  height: 54px;
+  padding: 0 16px;
+  border: 2px dashed var(--line-2);
+  border-radius: 16px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 21px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.18em;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.code-input::placeholder {
+  color: #c0adb0;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.code-input:focus {
+  border-color: var(--rose);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--rose) 15%, transparent);
+}
+
+.code-input:disabled {
+  background: #fffaf7;
+  opacity: 0.8;
+}
+
+.unlock-form .btn {
+  flex: none;
+  min-width: 168px;
+}
+
+.unlock-status {
+  position: relative;
+  z-index: 1;
+  min-height: 20px;
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+
+.unlock-status.is-loading {
+  color: var(--rose-deep);
+  font-weight: 700;
+}
+
+.unlock-status.is-error {
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: #fff0f0;
+  color: #b85463;
+}
+
+.unlock-card.is-loading {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--rose) 14%, transparent), var(--shadow);
+}
+
+.unlock-contact {
+  position: relative;
+  z-index: 1;
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.unlock-contact a {
+  color: var(--rose-deep);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+}
+
+.code-meta {
+  width: fit-content;
+  margin: 14px auto 0;
+  padding: 7px 14px;
+  border: 1.5px dashed var(--line-2);
+  border-radius: 999px;
+  background: rgba(255, 253, 251, 0.85);
+  color: var(--rose-deep);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.code-meta strong {
+  font-size: 14px;
+}
+
+/* ---------- 风格切换 ---------- */
+.theme-dock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 20px auto 0;
+  padding: 9px 12px 9px 16px;
+  border: 1.5px dashed var(--line-2);
+  border-radius: 999px;
+  background: rgba(255, 253, 251, 0.8);
+}
+
+.theme-dock__label {
+  color: var(--ink-2);
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
+/* ---------- 打印专用 ---------- */
+.print-only {
+  display: none;
+}
+
+/* ============================================================
+   小字 / 小图标放大
+   ============================================================ */
+.eyebrow {
+  font-size: 12px;
+}
+
+.kicker {
+  font-size: 11px;
+}
+
+.brand__text small {
+  font-size: 9px;
+}
+
+.topbar__pill {
+  font-size: 12.5px;
+}
+
+.hero__meta li {
+  font-size: 12.5px;
+}
+
+.sticker {
+  font-size: 13.5px;
+}
+
+.feature-card p {
+  font-size: 14px;
+}
+
+.step p {
+  font-size: 13.5px;
+}
+
+.footer p {
+  font-size: 12.5px;
+}
+
+.footer__tiny {
+  font-size: 11px !important;
+}
+
+.q-chip {
+  font-size: 12.5px;
+}
+
+.q-type {
+  font-size: 12px;
+}
+
+.q-hint {
+  font-size: 14px;
+}
+
+.quiz-progress__text {
+  font-size: 12.5px;
+}
+
+.option {
+  grid-template-columns: 42px minmax(0, 1fr) 24px;
+}
+
+.option__emoji {
+  width: 42px;
+  height: 42px;
+  font-size: 20px;
+}
+
+.option__text strong {
+  font-size: 14.5px;
+}
+
+.option__text small {
+  font-size: 12px;
+}
+
+.rank-item {
+  grid-template-columns: 34px 46px minmax(0, 1fr) auto;
+}
+
+.rank-item__emoji {
+  font-size: 24px;
+}
+
+.rank-item__text small {
+  font-size: 12px;
+}
+
+.rank-item__state {
+  font-size: 11.5px;
+}
+
+.quiz-foot__hint {
+  font-size: 12.5px;
+}
+
+.mini-label {
+  font-size: 11.5px;
+}
+
+.budget-note {
+  font-size: 11.5px;
+}
+
+.profile-tag {
+  font-size: 12.5px;
+}
+
+.profile-summary {
+  font-size: 14px;
+}
+
+.weight-row__name {
+  font-size: 13px;
+}
+
+.weight-row__pct {
+  font-size: 13px;
+}
+
+.report-head p {
+  font-size: 14px;
+}
+
+.pick__config {
+  font-size: 12px;
+}
+
+.pick__block li {
+  font-size: 13px;
+}
+
+.pick__fit {
+  font-size: 13px;
+}
+
+.advice p {
+  font-size: 13px;
+}
+
+.feature-card__icon {
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+}
+
+.brand__mark {
+  width: 42px;
+  height: 42px;
+}
+
+/* ============================================================
+   移动端补充
+   ============================================================ */
+@media (max-width: 640px) {
+  .unlock-card {
+    border-radius: 24px;
+    padding: 20px 15px;
+  }
+
+  .unlock-card__sticker {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    font-size: 20px;
+  }
+
+  .unlock-form {
+    flex-direction: column;
+  }
+
+  .unlock-form .btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .code-input {
+    height: 50px;
+    font-size: 19px;
+  }
+
+  .theme-dock {
+    border-radius: 18px;
+    padding: 10px 12px;
+  }
+
+  .option {
+    grid-template-columns: 38px minmax(0, 1fr) 22px;
+  }
+
+  .option__emoji {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+  }
+
+  .rank-item {
+    grid-template-columns: 32px 42px minmax(0, 1fr) auto;
+  }
+
+  .rank-item__emoji {
+    font-size: 22px;
+  }
+
+  .motif-layer .motif {
+    opacity: 0.12;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .option__text strong {
+    font-size: 14px;
+  }
+
+  .rank-item__state {
+    font-size: 10.5px;
+  }
+}
+
+/* ============================================================
+   可爱 PDF / 打印
+   ============================================================ */
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  body {
+    background: #fff !important;
+    color: #2f2629;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body::before,
+  .bg-decor,
+  .topbar,
+  .footer,
+  .unlock-card,
+  .theme-dock,
+  .scroll-cue,
+  .result-actions,
+  .debug,
+  .notice,
+  .code-meta,
+  .result-head,
+  .caption-card,
+  .toast,
+  .motif-layer {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .result-shell {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .print-cover {
+    position: relative;
+    overflow: hidden;
+    margin: 0 0 8px;
+    padding: 12px 18px 11px;
+    border: 2px dashed var(--line-2);
+    border-radius: 20px;
+    background:
+      radial-gradient(240px 120px at 92% 0%, var(--butter-soft) 0%, transparent 70%),
+      linear-gradient(135deg, #fffdfb 0%, var(--rose-soft) 100%);
+    break-inside: avoid;
+  }
+
+  .print-cover__tape {
+    position: absolute;
+    top: -8px;
+    left: 24px;
+    width: 92px;
+    height: 20px;
+    background: var(--butter);
+    opacity: 0.8;
+    transform: rotate(-4deg);
+  }
+
+  .print-cover__kicker {
+    margin: 0;
+    color: var(--rose-deep);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+  }
+
+  .print-cover h1 {
+    margin: 4px 0 1px;
+    font-size: 27px;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+  }
+
+  .print-cover__sub {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 12px;
+  }
+
+  .print-cover__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 9.5px;
+  }
+
+  .print-cover__sticker {
+    position: absolute;
+    right: 24px;
+    bottom: 8px;
+    color: var(--rose);
+    font-size: 48px;
+    line-height: 1;
+    opacity: 0.8;
+    transform: rotate(10deg);
+  }
+
+  .print-cover__quote {
+    position: absolute;
+    right: 26px;
+    bottom: 54px;
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 9.5px;
+    line-height: 1.6;
+    text-align: right;
+    opacity: 0.8;
+    transform: rotate(-2deg);
+  }
+
+  .profile-card {
+    display: grid;
+    grid-template-columns: 0.92fr 1.08fr;
+    gap: 14px;
+    padding: 8px 12px;
+    border-radius: 14px;
+    box-shadow: none;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .profile-card__left {
+    padding-right: 0;
+  }
+
+  .profile-card__right {
+    margin-top: 0;
+  }
+
+  .budget {
+    font-size: 24px;
+  }
+
+  .profile-summary {
+    margin-top: 6px;
+    padding-top: 6px;
+    font-size: 12px;
+  }
+
+  .profile-card__right {
+    margin-top: 8px;
+  }
+
+  .weight-label {
+    margin-bottom: 2px;
+  }
+
+  .weight-row {
+    grid-template-columns: 80px minmax(0, 1fr) 38px;
+    margin-bottom: 3px;
+  }
+
+  .weight-row__track {
+    height: 8px;
+  }
+
+  .report {
+    margin-top: 6px;
+  }
+
+  .report-head {
+    margin-bottom: 6px;
+    text-align: left;
+  }
+
+  .report-head h3 {
+    margin: 2px 0 4px;
+    font-size: 20px;
+  }
+
+  .report-head p {
+    max-width: none;
+    padding-left: 10px;
+    font-size: 11px;
+    line-height: 1.65;
+  }
+
+  .report-grid {
+    display: block;
+  }
+
+  html[data-theme] .pick--main {
+    border-color: color-mix(in srgb, var(--rose) 55%, #fff);
+    background: linear-gradient(165deg, #fffdfb 0%, var(--rose-soft) 100%);
+  }
+
+  html[data-theme] .pick__fit {
+    background: var(--cream-2);
+  }
+
+  html[data-theme] .advice {
+    background: var(--butter-soft);
+  }
+
+  html[data-theme] .advice--warn {
+    background: var(--rose-soft);
+  }
+
+  .pick {
+    margin-bottom: 7px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    box-shadow: none;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .pick--main,
+  .pick--backup {
+    background: #fffdfb;
+  }
+
+  .pick__top {
+    margin-bottom: 6px;
+  }
+
+  .pick__model {
+    font-size: 16px;
+  }
+
+  .pick__price {
+    font-size: 13px;
+  }
+
+  .pick__block {
+    margin-top: 8px;
+    padding-top: 7px;
+  }
+
+  .pick__label {
+    font-size: 9.5px;
+  }
+
+  .pick__block li {
+    font-size: 10.5px;
+    line-height: 1.55;
+  }
+
+  .pick__fit {
+    margin-top: 8px;
+    padding: 7px 9px;
+    font-size: 10.5px;
+  }
+
+  .report-extra {
+    display: block;
+    margin-top: 7px;
+  }
+
+  .advice {
+    display: block;
+    margin-bottom: 6px;
+    padding: 9px 12px;
+    border-radius: 12px;
+    break-inside: avoid;
+  }
+
+  .advice__label {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 9.5px;
+  }
+
+  .advice p {
+    font-size: 10.5px;
+    line-height: 1.65;
+  }
+
+  .print-checklist {
+    margin-top: 10px;
+    padding: 12px 16px;
+    border: 2px dashed var(--line-2);
+    border-radius: 16px;
+    background: #fffaf3;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-checklist h3 {
+    margin: 0 0 6px;
+    font-size: 14px;
+  }
+
+  .print-checklist ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px 16px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .print-checklist li {
+    position: relative;
+    padding-left: 14px;
+    color: var(--ink-2);
+    font-size: 10px;
+    line-height: 1.6;
+  }
+
+  .print-checklist li::before {
+    content: "♡";
+    position: absolute;
+    left: 0;
+    color: var(--rose);
+    font-weight: 800;
+  }
+
+  .print-sign {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 9px;
+    text-align: right;
+  }
+
+  .print-disclaimer {
+    margin: 2px 0 0;
+    color: #b9a9ad;
+    font-size: 8px;
+    text-align: right;
+  }
+
+  .motif-layer {
+    display: block !important;
+    position: fixed;
+    inset: 0;
+    opacity: 0.5;
+  }
+
+  .motif-layer .motif {
+    opacity: 0.12;
+  }
+}
